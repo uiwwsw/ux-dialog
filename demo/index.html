@@ -12,12 +12,50 @@
 </head>
 
 <body>
+    <button onclick="dialog1.open(dialog1Option)">다이얼로그테스트</button>
     <script>
-        var dialog = new UxDialog();
-        dialog.open({
+        var heart=0;
+        var dialog1Option = {
+            'confirm': {
+                'callback': function() {
+                    dialog1.close();
+                }
+            },
+            'cancel': {
+                'callback': function() {
+                    dialog2.open();
+                },
+                'text': '새로운 팝업 띄우기'
+            }
+        };
+        var dialog1 = new UxDialog({
             'title': '다이얼로그 테스트',
             'content': '이 다이얼로그는 쉽고 간편합니다. 많은 이용 부탁드립니다.'
         });
+        var dialog2 = new UxDialog({
+            'title': '만족도평가',
+            'content': '만족하셨나요?',
+            'confirm': {
+                'callback': function() {
+                    heart++;
+                    alert('만족도가' + heart + '(으)로 올랐습니다.');
+                    dialog2.close();
+                },
+                'text': '예'
+            },
+            'cancel': {
+                'callback': function() {
+                    heart--;
+                    alert('만족도가' + heart + '(으)로 내려갔습니다ㅠ');
+                    dialog1.open({
+                        'title': '흐규흐규',
+                        'content': '어느 부분이 마음에 안드셨나요?ㅠㅠ'
+                    });
+                },
+                'text': '아니요호~'
+            }
+        })
+        dialog1.open(dialog1Option);
     </script>
 </body>
 

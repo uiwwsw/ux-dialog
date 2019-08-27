@@ -1,0 +1,44 @@
+{
+  "name": "ux-dialog",
+  "version": "0.0.1",
+  "description": "수려한 팝업",
+  "main": "dist/ux-dialog.mvc.min.js",
+  "scripts": {
+    "watch": "gulp watching",
+    "test": "gulp",
+    "build": "npm run test && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uiwwsw/ux-dialog.git"
+  },
+  "keywords": [
+    "popup",
+    "dialog",
+    "팝업",
+    "다이얼로그"
+  ],
+  "author": "uiwwsw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uiwwsw/ux-dialog/issues"
+  },
+  "homepage": "https://github.com/uiwwsw/ux-dialog#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-footer": "^2.0.2",
+    "gulp-header": "^2.0.9",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "gulp-uglify": "^3.0.2",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4"
+  }
+}

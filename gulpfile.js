@@ -10,34 +10,39 @@ const uglify = require('gulp-uglify');
 const sass = require('gulp-sass');
 const ts = require('gulp-typescript');
 const tsProject = ts.createProject('tsconfig.json');
+const browserSync = require('browser-sync').create();
 
-function head() {
+function fnHead() {
   return `/*\n MIT License. \n ${package.name} v${package.version}\n author: ${package.author}\n homepage:${package.homepage}\n */ `;
 }
 
-function css() {
+function taskCss() {
   return src('src/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(concat('style.min.css'))
-    .pipe(footer(head()))
+    .pipe(footer(fnHead()))
     .pipe(sourcemaps.write())
-    .pipe(dest('dist'));
+    .pipe(dest('dist'))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
-function watchTs() {
+function taskWatchTs() {
   return src('src/index.ts')
+    .pipe(sourcemaps.init())
     .pipe(tsProject())
     .pipe(babel())
     .pipe(concat(`${package.name}.min.js`))
-    .pipe(dest('dist'));
+    .pipe(sourcemaps.write())
+    .pipe(dest('dist'))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
-function watching() {
-  return watch([ 'src/index.ts', 'src/style.scss' ], parallel(watchTs, css));
+function fnWatch() {
+  return watch([ 'src/index.ts', 'src/style.scss' ], parallel(taskWatchTs, taskCss));
 }
 
-function commonTs() {
+function taskTs() {
   return src('src/index.ts')
     .pipe(sourcemaps.init())
     .pipe(tsProject())
@@ -47,49 +52,54 @@ function commonTs() {
 }
 
 
-function js() {
+function taskJs() {
   return src(`dist/${package.name}.base.js`)
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(babel())
     .pipe(concat(`${package.name}.js`))
-    .pipe(header(head()))
+    .pipe(header(fnHead()))
     .pipe(sourcemaps.write())
     .pipe(dest('dist'));
 }
 
-function jsMin() {
+function taskJsMin() {
   return src(`dist/${package.name}.base.js`)
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(babel())
     .pipe(uglify())
     .pipe(concat(`${package.name}.min.js`))
-    .pipe(header(head()))
+    .pipe(header(fnHead()))
     .pipe(sourcemaps.write())
     .pipe(dest('dist'));
 }
 
-function jsMvc() {
+function taskJsMvs() {
   return src(`dist/${package.name}.base.js`)
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(footer('export default UxCarousel;'))
     .pipe(babel())
     .pipe(uglify())
     .pipe(concat(`${package.name}.mvc.min.js`))
-    .pipe(header(head()))
+    .pipe(header(fnHead()))
     .pipe(sourcemaps.write())
     .pipe(dest('dist'));
 }
 
-function jsEs5() {
+function taskJsEs5() {
   return src([ 'node_modules/@babel/polyfill/dist/polyfill.js', `dist/${package.name}.base.js` ])
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(babel())
     .pipe(uglify())
     .pipe(concat(`${package.name}.ea5.min.js`))
-    .pipe(header(head()))
+    .pipe(header(fnHead()))
     .pipe(sourcemaps.write())
     .pipe(dest('dist'));
 }
 
-exports.watching = watching;
-exports.default = series(commonTs, parallel(js, jsMin, jsMvc, jsEs5, css));
+function taskBrowserSync() {
+  return browserSync.init({ port: 3333, server: { index: './demo/index.html' } });
+
+}
+
+exports.watch = parallel(fnWatch, taskBrowserSync);
+exports.default = series(taskTs, parallel(taskJs, taskJsMin, taskJsMvs, taskJsEs5, taskCss));

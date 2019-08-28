@@ -4,7 +4,7 @@
   "description": "수려한 팝업",
   "main": "dist/ux-dialog.mvc.min.js",
   "scripts": {
-    "watch": "gulp watching",
+    "watch": "gulp watch",
     "test": "gulp",
     "build": "npm run test && npm publish"
   },
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "browser-sync": "^2.26.7",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",

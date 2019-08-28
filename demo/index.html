@@ -48,13 +48,13 @@
                     heart--;
                     alert('만족도가' + heart + '(으)로 내려갔습니다ㅠ');
                     dialog1.open({
-                        'title': '흐규흐규',
-                        'content': '어느 부분이 마음에 안드셨나요?ㅠㅠ'
+                        'title': heart < 0 ? '꾁!!!' : '흐규흐규',
+                        'content': heart < 0 ? 'ㅂㄷㅂㄷ' : '어느 부분이 마음에 안드셨나요?ㅠㅠ'
                     });
                 },
                 'text': '아니요호~'
             }
-        })
+        });
         dialog1.open(dialog1Option);
     </script>
 </body>

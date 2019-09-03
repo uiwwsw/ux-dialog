@@ -76,7 +76,7 @@ function taskJsMin() {
 function taskJsMvs() {
   return src(`dist/${package.name}.base.js`)
     .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(footer('export default UxCarousel;'))
+    .pipe(footer('export default UxDialog;'))
     .pipe(babel())
     .pipe(uglify())
     .pipe(concat(`${package.name}.mvc.min.js`))

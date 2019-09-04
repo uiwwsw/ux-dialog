@@ -128,7 +128,7 @@ class UxDialog {
         }
     }
 
-    public close() {
+    public close():void {
         const element = this.element;
         if (element) {
             element.classList.add('close');

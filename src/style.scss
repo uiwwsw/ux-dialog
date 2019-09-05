@@ -70,7 +70,7 @@
 
   &--container {
     overflow: auto;
-    max-height: 80vh;
+    max-height: calc(100vh - 200px);
     margin: 20px;
     padding: 10px 0;
   }

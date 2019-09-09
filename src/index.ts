@@ -8,6 +8,7 @@ interface Contents {
     content?: string | Node;
     confirm?: Button | null;
     cancel?: Button | null;
+    selfClose?: number;
 }
 
 const defaultText = {
@@ -22,6 +23,7 @@ const contentsType = {
     content: 'string',
     callback: 'function',
     text: 'string',
+    selfClose: 'number'
 };
 
 class UxDialog {
@@ -63,6 +65,7 @@ class UxDialog {
               <div class="ux-dialog--header">${contents.title}</div>
               <div class="ux-dialog--container">${contents.content}</div>
               <div class="ux-dialog--footer">${confirm}${cancel}</div>
+              <i class="ux-dialog--loading"></i>
             </div>
             <i class="ux-dialog--dim"></i>
           </div>
@@ -125,6 +128,13 @@ class UxDialog {
             }
             this.append(once);
             this.bindEvent(once);
+
+            if(once.selfClose) {
+                this.element.querySelector('.ux-dialog--loading').style.animationDuration = once.selfClose / 1000 + 's';
+                setTimeout(() => {
+                    this.close();
+                }, once.selfClose);
+            }
         }
     }
 

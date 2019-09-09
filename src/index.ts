@@ -27,6 +27,7 @@ const contentsType = {
 };
 
 class UxDialog {
+    private sto: any;
     private element: any;
     private contents: Contents;
 
@@ -130,8 +131,9 @@ class UxDialog {
             this.bindEvent(once);
 
             if(once.selfClose) {
+                clearTimeout(this.sto);
                 this.element.querySelector('.ux-dialog--loading').style.animationDuration = once.selfClose / 1000 + 's';
-                setTimeout(() => {
+                this.sto = setTimeout(() => {
                     this.close();
                 }, once.selfClose);
             }

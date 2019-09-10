@@ -104,16 +104,18 @@ class UxDialog {
 
     private bindEvent(contents?: Contents) {
         window.onkeyup = e => {
-            console.log(e.keyCode);
             if (contents.closeKey === e.keyCode) {
                 this.close();
+                return;
             }
-            if (contents.cancelKey) {
+            if (contents.cancelKey === e.keyCode) {
                 (contents.cancel.callback) && (contents.cancel.callback());
                 this.close();
+                return;
             }
-            if (contents.confirmKey) {
+            if (contents.confirmKey === e.keyCode) {
                 (contents.confirm.callback) && (contents.confirm.callback());
+                return;
             }
         };
         this.element.querySelector('.ux-dialog--close').onclick = () => {

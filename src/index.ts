@@ -9,6 +9,9 @@ interface Contents {
     confirm?: Button | null;
     cancel?: Button | null;
     selfClose?: number;
+    closeKey?: number;
+    cancelKey?: number;
+    confirmKey?: number;
 }
 
 const defaultText = {
@@ -23,7 +26,10 @@ const contentsType = {
     content: 'string',
     callback: 'function',
     text: 'string',
-    selfClose: 'number'
+    selfClose: 'number',
+    closeKey: 'number',
+    cancelKey: 'number',
+    confirmKey: 'number'
 };
 
 class UxDialog {
@@ -76,7 +82,7 @@ class UxDialog {
 
     static htmlToElement(str: string): any {
         const template = document.createElement('template');
-        str = str.trim(); 
+        str = str.trim();
         template.innerHTML = str;
         return template.content.firstChild;
     }
@@ -97,12 +103,25 @@ class UxDialog {
     }
 
     private bindEvent(contents?: Contents) {
+        window.onkeyup = e => {
+            console.log(e.keyCode);
+            if (contents.closeKey === e.keyCode) {
+                this.close();
+            }
+            if (contents.cancelKey) {
+                (contents.cancel.callback) && (contents.cancel.callback());
+                this.close();
+            }
+            if (contents.confirmKey) {
+                (contents.confirm.callback) && (contents.confirm.callback());
+            }
+        };
         this.element.querySelector('.ux-dialog--close').onclick = () => {
             this.close();
         };
         this.element.querySelector('.ux-dialog--footer').onclick = (e) => {
             const name = e.target.name;
-            switch(name) {
+            switch (name) {
                 case 'confirm':
                     (contents.confirm.callback) && (contents.confirm.callback());
                     break;
@@ -115,7 +134,7 @@ class UxDialog {
     }
 
     public open(contents?: Contents): void {
-        if(this.element === null) {
+        if (this.element === null) {
             let once: Contents = Object.assign({}, this.contents);
             if (contents) {
                 this.checkType(contents);
@@ -130,7 +149,7 @@ class UxDialog {
             this.append(once);
             this.bindEvent(once);
 
-            if(once.selfClose) {
+            if (once.selfClose) {
                 clearTimeout(this.sto);
                 this.element.querySelector('.ux-dialog--loading').style.animationDuration = once.selfClose / 1000 + 's';
                 this.sto = setTimeout(() => {
@@ -140,7 +159,7 @@ class UxDialog {
         }
     }
 
-    public close():void {
+    public close(): void {
         const element = this.element;
         if (element) {
             element.classList.add('close');

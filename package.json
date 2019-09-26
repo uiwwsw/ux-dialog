@@ -1,6 +1,6 @@
 {
   "name": "ux-dialog",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "수려한 팝업",
   "main": "dist/ux-dialog.mvc.min.js",
   "scripts": {

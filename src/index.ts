@@ -35,7 +35,7 @@ const contentsType = {
 };
 
 class UxDialog {
-    private keyUpEvents: any[];
+    static keyUpEvents: any[];
     private sto: any;
     private element: any;
     private contents: Contents;
@@ -99,7 +99,6 @@ class UxDialog {
     private getDefaultContents(contents: Contents): void {
         this.checkType(contents);
         this.element = null;
-        this.keyUpEvents = [];
         this.contents = {};
         Object.entries(contents).map((val) => {
             this.contents[val[0]] = val[1];
@@ -108,7 +107,10 @@ class UxDialog {
 
     private bindEvent(contents?: Contents) {
         if (window.onkeyup) {
-            this.keyUpEvents.push(window.onkeyup);
+            if (!UxDialog.keyUpEvents) {
+                UxDialog.keyUpEvents = [];
+            }
+            UxDialog.keyUpEvents.push(window.onkeyup);
         }
         window.onkeyup = e => {
             if (contents.closeKey === e.keyCode) {
@@ -140,8 +142,8 @@ class UxDialog {
                     (contents.confirm.callback) && (contents.confirm.callback());
                     break;
                 case 'cancel':
-                    (contents.cancel.callback) && (contents.cancel.callback());
                     this.close();
+                    (contents.cancel.callback) && (contents.cancel.callback());
                     break;
             }
         }
@@ -176,9 +178,9 @@ class UxDialog {
     public close(): void {
         const element = this.element;
         if (element) {
-            const keyUpLength = this.keyUpEvents.length;
-            if (this.keyUpEvents.length) {
-                window.onkeyup = this.keyUpEvents[keyUpLength - 1];
+            const keyUpLength = UxDialog.keyUpEvents.length;
+            if (keyUpLength) {
+                window.onkeyup = UxDialog.keyUpEvents.pop();
             } else {
                 window.onkeyup = null;
             }

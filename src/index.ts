@@ -41,6 +41,9 @@ class UxDialog {
     private contents: Contents;
 
     constructor(contents: Contents) {
+        if (!UxDialog.keyUpEvents) {
+            UxDialog.keyUpEvents = [];
+        }
         this.getDefaultContents(contents || {});
     }
 
@@ -107,9 +110,6 @@ class UxDialog {
 
     private bindEvent(contents?: Contents) {
         if (window.onkeyup) {
-            if (!UxDialog.keyUpEvents) {
-                UxDialog.keyUpEvents = [];
-            }
             UxDialog.keyUpEvents.push(window.onkeyup);
         }
         window.onkeyup = e => {

@@ -8,6 +8,7 @@ interface Contents {
     content?: string | Node;
     confirm?: Button | null;
     cancel?: Button | null;
+    close?: boolean;
     dimClose?: boolean;
     selfClose?: number;
     closeKey?: number;
@@ -23,6 +24,7 @@ const defaultText = {
 const contentsType = {
     confirm: 'boolean',
     cancel: 'boolean',
+    close: 'boolean',
     dimClose: 'boolean',
     title: 'string',
     content: 'string',
@@ -71,10 +73,10 @@ class UxDialog {
         if (contents.cancel) {
             cancel = `<button name="cancel" type="button">${contents.cancel.text || defaultText.cancel}</button>`
         }
-        const dialog = `
+        const dialog = ` 
           <div class="ux-dialog">
             <div class="ux-dialog--content">
-              <button type="button" class="ux-dialog--close">this dialog close</button>
+              <button type="button" class="ux-dialog--close" ${(contents.close === false) && ('style="display: none;"')}>this dialog close</button>
               <div class="ux-dialog--header">${contents.title}</div>
               <div class="ux-dialog--container">${contents.content}</div>
               <div class="ux-dialog--footer">${confirm}${cancel}</div>

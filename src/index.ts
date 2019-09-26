@@ -8,6 +8,7 @@ interface Contents {
     content?: string | Node;
     confirm?: Button | null;
     cancel?: Button | null;
+    dimClose?: boolean;
     selfClose?: number;
     closeKey?: number;
     cancelKey?: number;
@@ -22,6 +23,7 @@ const defaultText = {
 const contentsType = {
     confirm: 'boolean',
     cancel: 'boolean',
+    dimClose: 'boolean',
     title: 'string',
     content: 'string',
     callback: 'function',
@@ -33,6 +35,7 @@ const contentsType = {
 };
 
 class UxDialog {
+    private keyUpEvents: any[];
     private sto: any;
     private element: any;
     private contents: Contents;
@@ -96,6 +99,7 @@ class UxDialog {
     private getDefaultContents(contents: Contents): void {
         this.checkType(contents);
         this.element = null;
+        this.keyUpEvents = [];
         this.contents = {};
         Object.entries(contents).map((val) => {
             this.contents[val[0]] = val[1];
@@ -103,6 +107,9 @@ class UxDialog {
     }
 
     private bindEvent(contents?: Contents) {
+        if (window.onkeyup) {
+            this.keyUpEvents.push(window.onkeyup);
+        }
         window.onkeyup = e => {
             if (contents.closeKey === e.keyCode) {
                 this.close();
@@ -118,6 +125,11 @@ class UxDialog {
                 return;
             }
         };
+        if (contents.dimClose) {
+            this.element.querySelector('.ux-dialog--dim').onclick = () => {
+                this.close();
+            };
+        }
         this.element.querySelector('.ux-dialog--close').onclick = () => {
             this.close();
         };
@@ -164,6 +176,12 @@ class UxDialog {
     public close(): void {
         const element = this.element;
         if (element) {
+            const keyUpLength = this.keyUpEvents.length;
+            if (this.keyUpEvents.length) {
+                window.onkeyup = this.keyUpEvents[keyUpLength - 1];
+            } else {
+                window.onkeyup = null;
+            }
             element.classList.add('close');
             element.querySelector('.ux-dialog--dim').addEventListener('animationend', () => {
                 element.remove();

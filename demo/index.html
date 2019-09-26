@@ -17,9 +17,11 @@
         var heart=0;
         var dialog1Option = {
             'closeKey': 27,
+            'confirmKey': 13,
+            'dimClose': true,
             'confirm': {
                 'callback': function() {
-                    dialog1.close();
+                    dialog2.open();
                 }
             },
             'cancel': {
@@ -34,6 +36,8 @@
             'content': '이 다이얼로그는 쉽고 간편합니다. 많은 이용 부탁드립니다.'
         });
         var dialog2 = new UxDialog({
+            'confirmKey': 13,
+            'closeKey': 27,
             'title': '만족도평가',
             'content': '만족하셨나요?',
             'confirm': {

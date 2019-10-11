@@ -1,6 +1,6 @@
 /*
  MIT License. 
- ux-dialog v0.1.11
+ ux-dialog v0.1.12
  author: uiwwsw
  homepage:https://github.com/uiwwsw/ux-dialog#readme
  */ "use strict";

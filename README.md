@@ -13,7 +13,7 @@ UxDialog는 쉬운 방법으로 기본속성지정 및 일회성 속성을 지�
 //기본
 var saveContentPopup = new UxDialog(
   {
-    title:'제목', 
+    title:'제목',  // 선언할때의 속성은 기본속성이 됩니다. 오픈매소드 실행시 인자를 넘기지 않는다면 제목이라는 타이틀이 노출됩니다.
     content: '내용'
   }
 );
@@ -22,7 +22,7 @@ saveContentPopup.open();
 var justOpenPopup = new UxDialog();
 justOpenPopup.open(
   {
-    title:'제목',
+    title:'제목', //오픈매소드에 넘긴 속성은 일회성이 됩니다. 다음번에 제목이라는 타이틀을 다시 작성해야합니다.
     content:'내용'
   }
 );

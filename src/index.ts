@@ -14,6 +14,8 @@ interface Contents {
     closeKey?: number;
     cancelKey?: number;
     confirmKey?: number;
+    opend?: Function;
+    closed?: Function;
 }
 
 const defaultText = {
@@ -33,7 +35,9 @@ const contentsType = {
     selfClose: 'number',
     closeKey: 'number',
     cancelKey: 'number',
-    confirmKey: 'number'
+    confirmKey: 'number',
+    opend: 'function',
+    closed: 'function',
 };
 
 class UxDialog {
@@ -166,7 +170,13 @@ class UxDialog {
             }
             this.append(once);
             this.bindEvent(once);
-
+            if (once.opend) {
+                const action = () => {
+                    this.element.querySelector('.ux-dialog--dim').removeEventListener('animationend', action);
+                    once.opend();
+                };
+                this.element.querySelector('.ux-dialog--dim').addEventListener('animationend', action);
+            }
             if (once.selfClose) {
                 clearTimeout(this.sto);
                 this.element.querySelector('.ux-dialog--loading').style.animationDuration = once.selfClose / 1000 + 's';
@@ -177,7 +187,7 @@ class UxDialog {
         }
     }
 
-    public close(): void {
+    public close(callback?: Function): void {
         const element = this.element;
         if (element) {
             const keyUpLength = UxDialog.keyUpEvents.length;
@@ -188,6 +198,12 @@ class UxDialog {
             }
             element.classList.add('close');
             element.querySelector('.ux-dialog--dim').addEventListener('animationend', () => {
+                if (this.contents.closed) {
+                    this.contents.closed();
+                }
+                if (callback) {
+                    callback();
+                }
                 element.remove();
             });
             this.element = null;

@@ -54,6 +54,8 @@ interface Contents {
     closeKey?: number;       //닫힘버튼 키바인딩. keyCode 입력
     cancelKey?: number;      //취소버튼 키바인딩. keyCode 입력
     confirmKey?: number;     //확인버튼 키바인딩. keyCode 입력
+    closed?: Function;     // 오픈 콜백
+    opend?: Function;     // 클로즈 콜백
 }
 ```
 
